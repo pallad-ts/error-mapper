@@ -117,6 +117,28 @@ app.use((err, req, res, next) => {
 })
 ```
 
+## Creating error mapper
+
+First you need to decide whether you want to configure it manually via constructor
+
+```typescript
+const errorMapper = new ErrorMapperBuilder({
+	showStackTrace: false,
+	showUnknownError: false
+})
+	.get()
+```
+
+Or preconfigured it based on detected environment.
+
+```typescript
+const errorMapper = ErrorMapperBuilder.fromEnv()
+	.get()
+```
+
+In this case stack trace and unknown errors are visible only for `test` and `development` environments (determined
+by [@pallad/app-env](https://github.com/pallad-ts/app-env))
+
 ## Conditional configuration
 
 `error-mapper` extends [@pallad/builder](https://www.npmjs.com/package/@pallad/builder) which allows to easily configure

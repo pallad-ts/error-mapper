@@ -16,40 +16,6 @@ export class ErrorMapperBuilder<TOutput extends ErrorOutput> extends Builder {
 		showUnknownErrorMessage: false
 	}) {
 		super();
-		this.runIf(this.options.showStackTrace, () => {
-			this.registerOutputTransformer((output, error) => {
-				if (error && error instanceof Error && 'stack' in error) {
-					return {
-						...output,
-						stack: error.stack
-					}
-				}
-
-				return output;
-			});
-		});
-
-		this.registerOutputTransformer((output, error) => {
-			if (error && typeof error === 'object' && 'code' in error) {
-				return {
-					...output,
-					code: (error as { code: string }).code
-				};
-			}
-			return output;
-		});
-
-		this.runIf(!this.options.showUnknownErrorMessage, () => {
-			this.registerOutputTransformer((output, error, {isKnown}) => {
-				if (!isKnown) {
-					return {
-						...output,
-						message: 'Internal server error. Please try again later.'
-					}
-				}
-				return output;
-			});
-		})
 	}
 
 	setOptions(options: Partial<ErrorMapperBuilder.Options>) {
@@ -86,6 +52,7 @@ export class ErrorMapperBuilder<TOutput extends ErrorOutput> extends Builder {
 	}
 
 	get(): ErrorMapper<TOutput> {
+		this.preconfigure();
 		const computeInitialOutputForError = (err: unknown): TOutput | undefined => {
 			for (const mapping of this.mappings) {
 				const mappingResult = mapping(err);
@@ -116,6 +83,43 @@ export class ErrorMapperBuilder<TOutput extends ErrorOutput> extends Builder {
 				}
 			) as TOutput;
 		}
+	}
+
+	private preconfigure() {
+		this.runIf(this.options.showStackTrace, () => {
+			this.registerOutputTransformer((output, error) => {
+				if (error && error instanceof Error && 'stack' in error) {
+					return {
+						...output,
+						stack: error.stack
+					}
+				}
+
+				return output;
+			});
+		});
+
+		this.registerOutputTransformer((output, error) => {
+			if (error && typeof error === 'object' && 'code' in error) {
+				return {
+					...output,
+					code: (error as { code: string }).code
+				};
+			}
+			return output;
+		});
+
+		this.runIf(!this.options.showUnknownErrorMessage, () => {
+			this.registerOutputTransformer((output, error, {isKnown}) => {
+				if (!isKnown) {
+					return {
+						...output,
+						message: 'Internal server error. Please try again later.'
+					}
+				}
+				return output;
+			});
+		})
 	}
 }
 

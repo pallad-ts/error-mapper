@@ -146,8 +146,27 @@ describe('ErrorMapperBuilder', () => {
 		});
 	});
 
-	describe('output formatters', () => {
+	describe('setting options', () => {
+		it('showing stack trace', () => {
+			const mapper = new ErrorMapperBuilder({showStackTrace: false, showUnknownErrorMessage: false})
+				.setOptions({showStackTrace: true})
+				.get()
 
+			expect(mapper(new Error('test')))
+				.toHaveProperty('stack');
+		});
+
+		it('showing unknown error', () => {
+			const mapper = new ErrorMapperBuilder({showStackTrace: false, showUnknownErrorMessage: false})
+				.setOptions({showUnknownErrorMessage: true})
+				.get()
+
+			expect(mapper(new Error('test')))
+				.toHaveProperty('message', 'test');
+		})
+	});
+
+	describe('output formatters', () => {
 		describe('output formatter is called with a regular original error and meta', () => {
 			const formatter = sinon.stub().callsFake((output) => ({...output, fake: 1}));
 
