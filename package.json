@@ -11,7 +11,8 @@
     "test": "./node_modules/.bin/pallad-scripts test",
     "lint": "./node_modules/.bin/pallad-scripts lint",
     "generate-barrels": "./node_modules/.bin/barrelsby -l all --delete -d ./src",
-    "compile": "npm run generate-barrels && ./node_modules/.bin/pallad-scripts compile"
+    "compile": "npm run generate-barrels && ./node_modules/.bin/pallad-scripts compile",
+    "prepublishOnly": "npm run compile"
   },
   "files": [
     "compiled"
