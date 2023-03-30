@@ -1,7 +1,7 @@
 import {ErrorOutput} from "./ErrorOutput";
 
 export interface OutputTransformer<TOutput extends ErrorOutput> {
-	(output: ErrorOutput, error: unknown, meta: OutputTransformer.Meta): ErrorOutput;
+	(output: TOutput, error: unknown, meta: OutputTransformer.Meta): TOutput;
 }
 
 export namespace OutputTransformer {

@@ -1,6 +1,6 @@
 {
   "name": "@pallad/error-mapper",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Generic error mapper",
   "main": "compiled/index.js",
   "types": "compiled/index.d.ts",

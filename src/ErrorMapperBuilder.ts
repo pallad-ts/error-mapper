@@ -80,7 +80,7 @@ export class ErrorMapperBuilder<TOutput extends ErrorOutput> extends Builder {
 				},
 				mappingResult ?? {
 					message: err instanceof Error ? err.message : 'Unknown error'
-				}
+				} as TOutput
 			) as TOutput;
 		}
 	}
