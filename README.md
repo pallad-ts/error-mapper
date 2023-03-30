@@ -25,13 +25,18 @@ npm install @pallad/error-mapper
 
 # Problem
 
-// TODO
+Whenever errors from application are caught you need to represent them properly in the response.
+For example HTTP status code needs to represented, you need to decide whether to include stack trace, how about errors
+that are not thrown from your application directly but another library?
+
+While it sounds simple this turns out to be a problematic for many.
 
 # Solution
 
 Have a set of rules that defines how certain error should be represented.
-`error-mapper` helps with that by providing options to handle unknown errors, hiding error message for them (depending
-on environment) or displaying stack for development environments.
+`error-mapper` helps with that by providing options map error to desired output in composable way, handle unknown
+errors, hide error message for them depending on environment, displaying stack for development environments, allowing to
+listen on unknown errors, globally format output.
 
 # Usage and how it works
 
@@ -64,11 +69,9 @@ app.use((err, req, res, next) => {
 })
 ```
 
-`ErrorMapping` is a function that receives and error and decides whether can handle it by returning desired output.
+`ErrorMapping` is a function that receives an error and decides whether can handle it by returning desired output.
 
-For example you might want to return validation errors or extra details about `NotFound` error, to the output.
-
-Example:
+For example you might want to return validation errors or extra details about `NotFound` error.
 
 ```typescript
 ErrorMapperBuilder.fromEnv()
@@ -101,10 +104,10 @@ ErrorMapperBuilder.fromEnv()
 ```
 
 Whenever final mapper gets called, error mappers are invoked in registration order until the one that is able to handle
-the error returns an output. Output then gets formatted by registered output transformers and returned.
+the error returns an output. The output then gets formatted by registered output transformers and returned.
 
 `error-mapper` has no idea what to do with created output and you are responsible to do whatever is needed to properly
-represent the situation.
+represent data.
 
 ```typescript
 app.use((err, req, res, next) => {
@@ -114,12 +117,29 @@ app.use((err, req, res, next) => {
 })
 ```
 
-## Showing error stack
+## Conditional configuration
+
+`error-mapper` extends [@pallad/builder](https://www.npmjs.com/package/@pallad/builder) which allows to easily configure
+the builder without breaking chaining.
+
+```typescript
+ErrorMapperBuilder.fromEnv()
+	.runIf(process.env.ERROR_DISPLAY_NAME === '1', (builder) => { // shouldDisplayName
+		return builder.registerOutputTransformer((output, error) => {
+			if (error instanceof Error) {
+				return {...output, name: error.name}
+			}
+			return output;
+		})
+	})
+```
+
+## Showing stack trace
 
 `stack` is returned only if option `showStackTrace` is set - default `false`.
 
 When `ErrorMapperBuilder.fromEnv` is used then it is set to true for `development` and `test` environment (determined
-by [app-env](https://github.com/pallad-ts/app-env)).
+by [@pallad/app-env](https://github.com/pallad-ts/app-env)).
 
 ```typescript 
 import {ErrorMapperBuilder} from '@pallad/error-mapper';
@@ -138,7 +158,7 @@ const result = errorMapper(new Error('test'))
 
 By default unknown error (the one that has no mapper) is displayed only for `development` and `test` environment (
 determined
-by [app-env](https://github.com/pallad-ts/app-env)).
+by [@pallad/app-env](https://github.com/pallad-ts/app-env)).
 
 Unknown error message (the one that has no mapper) is returned only if option `showUnknownError` is set -
 default `false`.
@@ -179,21 +199,14 @@ Listener has no effect on produced output.
 ```typescript
 const mapper = ErrorMapperBuilder()
 	.onUnknownError(error => {
-        console.error('Fatal error we do not know how to handle', error);
+		console.error('Fatal error we do not know how to handle', error);
 	})
 	.get()
 ```
 
-# Real life examples
+# FAQ
 
-## Mapping from Zod error
+## Type of `error` is of type `unknown`. Why is that?
 
-// TODO
-
-## Mapping authentication error
-
-// TODO
-
-## Mapping Not Found error
-
-// TODO
+While it is common sense to type it as `Error` but javascript can throw almost anything, even raw strings. In practice
+turned out that not everything has to be an `Error`. Moreover `unknown` forces you to perform proper type checks.
