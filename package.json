@@ -28,9 +28,9 @@
   },
   "homepage": "https://github.com/pallad-ts/error-mapper#readme",
   "devDependencies": {
-    "@pallad/scripts": "^3.0.2",
+    "@pallad/scripts": "^4",
     "barrelsby": "^2.5.1",
-    "sinon": "^14"
+    "sinon": "^17"
   },
   "dependencies": {
     "@pallad/app-env": "^3.1.0",

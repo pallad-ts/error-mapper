@@ -1,7 +1,7 @@
 import {ErrorOutput} from "./ErrorOutput";
 import {ErrorMapper} from "./ErrorMapper";
 import {Builder} from "@pallad/builder";
-import {Info, info} from "@pallad/app-env";
+import {Env, Info, info} from "@pallad/app-env";
 import {OutputTransformer} from "./OutputTransformer";
 import {ErrorMapping} from "./ErrorMapping";
 import {UnknownErrorListener} from "./UnknownErrorListener";
@@ -29,7 +29,7 @@ export class ErrorMapperBuilder<TOutput extends ErrorOutput> extends Builder {
 	/**
 	 * Creates preconfigured mapper with options suitable for environment
 	 */
-	static fromEnv<TOutput extends ErrorOutput>(env: Info = info) {
+	static fromEnv<TOutput extends ErrorOutput>(env: Info<Env<string>> = info) {
 		return new ErrorMapperBuilder<TOutput>({
 			showStackTrace: env.isDevelopment || env.isTest,
 			showUnknownErrorMessage: env.isDevelopment || env.isTest
