@@ -1,4 +1,4 @@
-import {ErrorMapperBuilder} from '@src/ErrorMapperBuilder';
+import {ErrorMapperBuilder} from '../ErrorMapperBuilder';
 import * as sinon from 'sinon';
 
 describe('ErrorMapperBuilder', () => {
@@ -168,7 +168,7 @@ describe('ErrorMapperBuilder', () => {
 
 	describe('output formatters', () => {
 		describe('output formatter is called with a regular original error and meta', () => {
-			const formatter = sinon.stub().callsFake((output) => ({...output, fake: 1}));
+			const formatter = sinon.stub().callsFake((output: any) => ({...output, fake: 1}));
 
 			const mappedOutput = {
 				message: 'Invalid'
@@ -176,7 +176,7 @@ describe('ErrorMapperBuilder', () => {
 			const error1 = new Error('test');
 			const error2 = new Error('test2');
 			const mapper = new ErrorMapperBuilder({showStackTrace: false, showUnknownErrorMessage: true})
-				.registerMapping((error) => {
+				.registerMapping(error => {
 					if (error1 === error) {
 						return mappedOutput;
 					}
