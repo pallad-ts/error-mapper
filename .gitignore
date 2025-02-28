@@ -8,3 +8,4 @@ junit.xml
 .eslintcache
 tsnode-cache
 .task
+dist

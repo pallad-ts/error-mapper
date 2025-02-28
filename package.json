@@ -2,21 +2,36 @@
   "name": "@pallad/error-mapper",
   "version": "1.1.0",
   "description": "Generic error mapper",
-  "main": "compiled/index.js",
-  "types": "compiled/index.d.ts",
+  "main": "dist/pallad-error-mapper.cjs.js",
+  "module": "dist/pallad-error-mapper.esm.js",
+  "exports": {
+    ".": {
+      "module": "./dist/pallad-error-mapper.esm.js",
+      "default": "./dist/pallad-error-mapper.cjs.js"
+    },
+    "./package.json": "./package.json"
+  },
   "directories": {
     "test": "test"
   },
   "scripts": {
     "test": "jest",
     "lint": "eslint src/**/*.ts",
-    "generate-barrels": "./node_modules/.bin/barrelsby -l all --delete -d ./src",
-    "compile": "npm run generate-barrels && ./node_modules/.bin/pallad-scripts compile",
-    "prepublishOnly": "npm run compile"
+    "generate-barrels": "barrelsby -l replace -L --delete -d ./src",
+    "compile": "npm run generate-barrels && preconstruct build",
+    "prepublishOnly": "npm run compile",
+    "setup:dev": "preconstruct dev",
+    "setup:fix": "preconstruct fix"
   },
   "files": [
-    "compiled"
+    "dist"
   ],
+  "preconstruct": {
+    "exports": true,
+    "entrypoints": [
+      "./index.ts"
+    ]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/pallad-ts/error-mapper.git"
@@ -28,7 +43,11 @@
   },
   "homepage": "https://github.com/pallad-ts/error-mapper#readme",
   "devDependencies": {
+    "@babel/core": "^7.26.9",
+    "@babel/preset-typescript": "^7.26.0",
     "@pallad/scripts": "^4",
+    "@preconstruct/cli": "^2.8.11",
+    "@types/sinon": "^17.0.4",
     "barrelsby": "^2.5.1",
     "sinon": "^17"
   },
