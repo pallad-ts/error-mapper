@@ -8,7 +8,7 @@ jobs:
   main_job:
     executor:
       name: node/default
-      tag: "20"
+      tag: "lts"
     steps:
       - checkout
       - node/install-packages
