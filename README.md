@@ -13,10 +13,6 @@
 
 ![Example code](./assets/intro-code.png)
 
-# Community
-
-Join our [discord server](https://discord.gg/G5tSBYbpej)
-
 # Installation
 
 ```shell
