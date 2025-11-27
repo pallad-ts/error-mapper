@@ -17,7 +17,7 @@
   "scripts": {
     "test": "jest",
     "lint": "eslint src/**/*.ts",
-    "generate-barrels": "./node_modules/.bin/barrelsby -l all --delete -d ./src",
+    "generate-barrels": "barrelsby -l replace -L --delete -d ./src",
     "compile": "npm run generate-barrels && preconstruct build",
     "prepublishOnly": "npm run compile",
     "setup:dev": "preconstruct dev",
