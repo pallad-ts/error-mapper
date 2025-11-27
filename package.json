@@ -8,8 +8,8 @@
     "test": "test"
   },
   "scripts": {
-    "test": "./node_modules/.bin/pallad-scripts test",
-    "lint": "./node_modules/.bin/pallad-scripts lint",
+    "test": "jest",
+    "lint": "eslint src/**/*.ts",
     "generate-barrels": "./node_modules/.bin/barrelsby -l all --delete -d ./src",
     "compile": "npm run generate-barrels && ./node_modules/.bin/pallad-scripts compile",
     "prepublishOnly": "npm run compile"
@@ -29,11 +29,12 @@
   "homepage": "https://github.com/pallad-ts/error-mapper#readme",
   "devDependencies": {
     "@pallad/scripts": "^4",
+    "@types/sinon": "^21.0.0",
     "barrelsby": "^2.5.1",
     "sinon": "^17"
   },
   "dependencies": {
-    "@pallad/app-env": "^3.1.0",
+    "@pallad/app-env": "^4",
     "@pallad/builder": "^1.0.1"
   }
 }

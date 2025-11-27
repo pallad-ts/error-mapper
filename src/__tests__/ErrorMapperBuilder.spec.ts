@@ -1,4 +1,4 @@
-import {ErrorMapperBuilder} from '@src/ErrorMapperBuilder';
+import {ErrorMapperBuilder} from '../ErrorMapperBuilder';
 import * as sinon from 'sinon';
 
 describe('ErrorMapperBuilder', () => {
